@@ -1,0 +1,54 @@
+{
+	"name"			: "ipub/500px",
+	"type"			: "library",
+	"description"	: "500px API client with authorization for Nette Framework",
+	"keywords"		: ["nette", "ipub", "ipublikuj", "500px", "authorization"],
+	"homepage"		: "https://github.com/iPublikuj/500px.git",
+	"license"		: ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+
+	"authors"		: [
+		{
+			"name"		: "Adam Kadlec",
+			"homepage"	: "http://www.ipublikuj.eu/"
+		}
+	],
+
+	"support": {
+		"email"		:"support@ipublikuj.eu",
+		"issues"	:"https://github.com/iPublikuj/500px/issues"
+	},
+
+	"require": {
+		"php"				: ">=5.4",
+
+		"nette/application"	: "~2.2",
+		"nette/di"			: "~2.2",
+		"nette/http"		: "~2.2",
+		"nette/utils"		: "~2.2",
+
+		"ipub/oauth"		: "^1.0.0",
+
+		"ext-json"	: "*"
+	},
+
+	"require-dev": {
+		"nette/bootstrap"		: "~2.2",
+		"nette/forms"			: "~2.2",
+		"nette/mail"			: "~2.2",
+		"nette/robot-loader"	: "~2.2",
+		"nette/safe-stream"		: "~2.2",
+		"nette/tester"			: "@dev",
+		"tracy/tracy"			: "@dev",
+		"janmarek/mockista"		: "@dev"
+	},
+
+	"autoload": {
+		"psr-0": {
+			"IPub\\FiveHundredPixel\\": "src/"
+		}
+	},
+
+	"autoload-dev": {
+		"classmap": ["tests/IPubTests/"]
+	}
+}

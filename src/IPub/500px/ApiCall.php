@@ -190,7 +190,7 @@ abstract class ApiCall extends Nette\Object
 	/**
 	 * Simply pass anything starting with a slash and it will call the Api, for example
 	 * <code>
-	 * $details = $flickr->api('flick.people.info');
+	 * $details = $fiveHundredPixel->api('flick.people.info');
 	 * </code>
 	 *
 	 * @param string $path
@@ -212,18 +212,12 @@ abstract class ApiCall extends Nette\Object
 			$method = Api\Request::GET;
 		}
 
-		$params = array_merge($params, [
-			'method'            => $path,
-			'format'            => 'json',
-			'nojsoncallback'    => 1,
-		]);
-
 		$response = $this->httpClient->makeRequest(
-			new Api\Request($this->consumer, $this->config->createUrl('api', 'rest', $params), $method, $post, $headers, $this->getAccessToken()),
+			new Api\Request($this->consumer, $this->config->createUrl('api', $path, $params), $method, $post, $headers, $this->getAccessToken()),
 			'HMAC-SHA1'
 		);
 
-		if (!$response->isJson() || (!$data = Utils\ArrayHash::from($response->toArray())) || Utils\Strings::lower($data->stat) != 'ok') {
+		if (!$response->isJson() || (!$data = Utils\ArrayHash::from($response->toArray()))) {
 			$ex = $response->toException();
 			throw $ex;
 		}
@@ -233,83 +227,5 @@ abstract class ApiCall extends Nette\Object
 		}
 
 		return Utils\ArrayHash::from($response->toArray());
-	}
-
-	/**
-	 * Upload photo to the Flickr
-	 *
-	 * @param string $photo
-	 * @param array $params
-	 *
-	 * @return int
-	 *
-	 * @throws Exceptions\InvalidArgumentException
-	 * @throws OAuth\Exceptions\ApiException|static
-	 */
-	public function uploadPhoto($photo, array $params = [])
-	{
-		$data = $this->processImage('upload', $photo, $params);
-
-		return (string) $data->photoid;
-	}
-
-	/**
-	 * Replace photo in Flickr
-	 *
-	 * @param string $photo
-	 * @param int $photoId
-	 * @param bool $async
-	 *
-	 * @return int
-	 *
-	 * @throws Exceptions\InvalidArgumentException
-	 * @throws OAuth\Exceptions\ApiException|static
-	 */
-	public function replacePhoto($photo, $photoId, $async = FALSE)
-	{
-		// Complete request params
-		$params = [
-			'photo_id' => $photoId,
-			'async' => $async ? 1 : 0
-		];
-
-		$data = $this->processImage('replace', $photo, $params);
-
-		return (string) $data->photoid;
-	}
-
-	/**
-	 * @param string $method
-	 * @param string $photo Path to image
-	 * @param array $params
-	 *
-	 * @return Utils\ArrayHash
-	 *
-	 * @throws Exceptions\InvalidArgumentException
-	 * @throws OAuth\Exceptions\ApiException|static
-	 */
-	private function processImage($method, $photo, array $params = [])
-	{
-		if (!file_exists($photo)) {
-			throw new Exceptions\InvalidArgumentException("File '$photo' does not exists. Please provide valid path to file.");
-		}
-
-		// Add file to post params
-		$post = [
-			'photo' => new \CURLFile($photo),
-		];
-
-		$response = $this->httpClient->makeRequest(
-			new Api\Request($this->consumer, $this->config->createUrl('upload', $method, $params), Api\Request::POST, $post, [], $this->getAccessToken()),
-			'HMAC-SHA1'
-		);
-
-		if ($response->isOk() && $response->isXml() && ($data = Utils\ArrayHash::from($response->toArray())) && $data->{'@attributes'}->stat == 'ok') {
-			return $data;
-
-		} else {
-			$ex = $response->toException();
-			throw $ex;
-		}
 	}
 }

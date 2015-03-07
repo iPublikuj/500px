@@ -26,7 +26,7 @@ use IPub\OAuth;
 
 /**
  * Component that you can connect to presenter
- * and use as public mediator for Flickr OAuth redirects communication
+ * and use as public mediator for FiveHundredPixel OAuth redirects communication
  *
  * @package		iPublikuj:500px!
  * @subpackage	UI
@@ -41,28 +41,28 @@ class LoginDialog extends Application\UI\Control
 	public $onResponse = [];
 
 	/**
-	 * @var Flickr\Client
+	 * @var FiveHundredPixel\Client
 	 */
 	protected $client;
 
 	/**
-	 * @var Flickr\Configuration
+	 * @var FiveHundredPixel\Configuration
 	 */
 	protected $config;
 
 	/**
-	 * @var Flickr\SessionStorage
+	 * @var FiveHundredPixel\SessionStorage
 	 */
 	protected $session;
 
 	/**
-	 * @param Flickr\Client $flickr
+	 * @param FiveHundredPixel\Client $fiveHundredPixel
 	 */
-	public function __construct(Flickr\Client $flickr)
+	public function __construct(FiveHundredPixel\Client $fiveHundredPixel)
 	{
-		$this->client = $flickr;
-		$this->config = $flickr->getConfig();
-		$this->session = $flickr->getSession();
+		$this->client = $fiveHundredPixel;
+		$this->config = $fiveHundredPixel->getConfig();
+		$this->session = $fiveHundredPixel->getSession();
 
 		parent::__construct();
 
@@ -70,7 +70,7 @@ class LoginDialog extends Application\UI\Control
 	}
 
 	/**
-	 * @return Flickr\Client
+	 * @return FiveHundredPixel\Client
 	 */
 	public function getClient()
 	{
@@ -96,16 +96,17 @@ class LoginDialog extends Application\UI\Control
 
 	/**
 	 * Checks, if there is a user in storage and if not, it redirects to login dialog.
-	 * If the user is already in session storage, it will behave, as if were redirected from flickr right now,
+	 * If the user is already in session storage, it will behave, as if were redirected from fiveHundredPixel right now,
 	 * this means, it will directly call onResponse event.
 	 *
 	 * @throws Nette\Application\AbortException
 	 */
 	public function handleOpen()
 	{
-		if (!$this->client->getUser()) { // no user
+		$this->session->clearAll();
+//		if (!$this->client->getUser()) { // no user
 			$this->open();
-		}
+//		}
 
 		$this->onResponse($this);
 		$this->presenter->redirect('this');
@@ -118,10 +119,11 @@ class LoginDialog extends Application\UI\Control
 	public function open()
 	{
 		if ($this->client->obtainRequestToken()) {
+
 			$this->presenter->redirectUrl($this->getUrl());
 
 		} else {
-			throw new OAuth\Exceptions\RequestFailedException('User could not be authenticated.', 'flickr');
+			throw new OAuth\Exceptions\RequestFailedException('User could not be authenticated.', 'fiveHundredPixel');
 		}
 	}
 

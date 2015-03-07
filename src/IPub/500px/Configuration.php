@@ -18,7 +18,7 @@ use Nette;
 use Nette\Http;
 
 /**
- * Flickr's extension configuration storage. Store basic extension settings
+ * 500px's extension configuration storage. Store basic extension settings
  *
  * @package		iPublikuj:500px!
  * @subpackage	common
@@ -46,9 +46,8 @@ class Configuration extends Nette\Object
 	 * @var array
 	 */
 	public $domains = [
-		'oauth' => 'https://www.flickr.com/services/oauth/',
-		'api' => 'https://api.flickr.com/services/',
-		'upload' => 'https://up.flickr.com/services/',
+		'oauth' => 'https://api.500px.com/v1/oauth/',
+		'api' => 'https://api.500px.com/v1/',
 	];
 
 	/**
@@ -72,7 +71,7 @@ class Configuration extends Nette\Object
 	 */
 	public function createUrl($name, $path = NULL, $params = [])
 	{
-		if (preg_match('~^https?://([^.]+\\.)?flickr\\.com/~', trim($path))) {
+		if (preg_match('~^https?://([^.]+\\.)?fiveHundredPixel\\.com/~', trim($path))) {
 			$url = new Http\UrlScript($path);
 
 		} else {

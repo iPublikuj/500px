@@ -45,7 +45,7 @@ class Client extends ApiCall
 	private $httpRequest;
 
 	/**
-	 * The ID of the Flickr user, or 0 if the user is logged out
+	 * The ID of the 500px user, or 0 if the user is logged out
 	 *
 	 * @var integer
 	 */
@@ -182,7 +182,7 @@ class Client extends ApiCall
 	}
 
 	/**
-	 * Get the UID of the connected user, or 0 if the Flickr user is not connected.
+	 * Get the UID of the connected user, or 0 if the FiveHundredPixel user is not connected.
 	 *
 	 * @return string the UID if available.
 	 */
@@ -214,7 +214,7 @@ class Client extends ApiCall
 	protected function getUserFromAccessToken()
 	{
 		try {
-			$user = $this->get('flickr.test.login');
+			$user = $this->get('users');
 
 			if ($user instanceof Utils\ArrayHash && $user->offsetExists('user')) {
 				return $user->user->id;
@@ -234,7 +234,7 @@ class Client extends ApiCall
 	 * requests, then considering an authorization code, and then
 	 * falling back to any persistent store storing the user.
 	 *
-	 * @return integer The id of the connected Flickr user, or 0 if no such user exists
+	 * @return integer The id of the connected FiveHundredPixel user, or 0 if no such user exists
 	 */
 	protected function getUserFromAvailableData()
 	{
@@ -255,7 +255,7 @@ class Client extends ApiCall
 	}
 
 	/**
-	 * Get a request token from Flickr
+	 * Get a request token from FiveHundredPixel
 	 *
 	 * @param string|null $callback
 	 *
@@ -272,7 +272,7 @@ class Client extends ApiCall
 		];
 
 		$response = $this->httpClient->makeRequest(
-			new Api\Request($this->consumer, $this->config->createUrl('oauth', 'request_token', $params), OAuth\Api\Request::GET),
+			new Api\Request($this->consumer, $this->config->createUrl('oauth', 'request_token', $params), OAuth\Api\Request::POST),
 			'HMAC-SHA1'
 		);
 
@@ -295,11 +295,11 @@ class Client extends ApiCall
 
 	/**
 	 * Retrieves an access token and access token secret for the given authorization verifier and token
-	 * (previously generated from www.flickr.com on behalf of a specific user).
-	 * The authorization verifier and token is sent to www.flickr.com/services/oauth
+	 * (previously generated from www.fiveHundredPixel.com on behalf of a specific user).
+	 * The authorization verifier and token is sent to www.fiveHundredPixel.com/services/oauth
 	 * and a legitimate access token is generated provided the access token
 	 * and the user for which it was generated all match, and the user is
-	 * either logged in to Flickr or has granted an offline access permission
+	 * either logged in to FiveHundredPixel or has granted an offline access permission
 	 *
 	 * @param string $verifier
 	 * @param string $token
@@ -321,7 +321,7 @@ class Client extends ApiCall
 		$token = new OAuth\Token($this->session->request_token, $this->session->request_token_secret);
 
 		$response = $this->httpClient->makeRequest(
-			new Api\Request($this->consumer, $this->config->createUrl('oauth', 'access_token', $params), OAuth\Api\Request::GET, [], [], $token),
+			new Api\Request($this->consumer, $this->config->createUrl('oauth', 'access_token', $params), OAuth\Api\Request::POST, [], [], $token),
 			'HMAC-SHA1'
 		);
 

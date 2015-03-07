@@ -21,7 +21,7 @@ use IPub;
 use IPub\FiveHundredPixel\Exceptions;
 
 /**
- * Flickr's user profile
+ * 500px's user profile
  *
  * @package		iPublikuj:500px!
  * @subpackage	common
@@ -33,7 +33,7 @@ class Profile extends Nette\Object
 	/**
 	 * @var Client
 	 */
-	private $flickr;
+	private $fiveHundredPixel;
 
 	/**
 	 * @var string
@@ -46,14 +46,14 @@ class Profile extends Nette\Object
 	private $details;
 
 	/**
-	 * @param Client $flickr
+	 * @param Client $fiveHundredPixel
 	 * @param string $profileId
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function __construct(Client $flickr, $profileId = NULL)
+	public function __construct(Client $fiveHundredPixel, $profileId = NULL)
 	{
-		$this->flickr = $flickr;
+		$this->fiveHundredPixel = $fiveHundredPixel;
 
 		if (is_numeric($profileId)) {
 			throw new Exceptions\InvalidArgumentException("ProfileId must be a username of the account you're trying to read or NULL, which means actually logged in user.");
@@ -68,7 +68,7 @@ class Profile extends Nette\Object
 	public function getId()
 	{
 		if ($this->profileId === NULL) {
-			return $this->flickr->getUser();
+			return $this->fiveHundredPixel->getUser();
 		}
 
 		return $this->profileId;
@@ -85,17 +85,13 @@ class Profile extends Nette\Object
 			try {
 
 				if ($this->profileId !== NULL) {
-					if (($user = $this->flickr->get('flickr.people.findByUsername', ['username' => $this->profileId]))
-						&& ($user instanceof Utils\ArrayHash)
-						&& ($result = $this->flickr->get('flickr.people.getInfo', ['user_id' => $user->user->id]))
-						&& ($result instanceof Utils\ArrayHash)
-					) {
-						$this->details = $result->person;
+					if (($result = $this->fiveHundredPixel->get('users/show', ['username' => $this->profileId])) && ($result instanceof Utils\ArrayHash)) {
+						$this->details = $result->user;
 					}
 
-				} else if ($user = $this->flickr->getUser()) {
-					if (($result = $this->flickr->get('flickr.people.getInfo', ['user_id' => $user])) && ($result instanceof Utils\ArrayHash)) {
-						$this->details = $result->person;
+				} else if ($user = $this->fiveHundredPixel->getUser()) {
+					if (($result = $this->fiveHundredPixel->get('users')) && ($result instanceof Utils\ArrayHash)) {
+						$this->details = $result->user;
 					}
 
 				} else {

@@ -44,7 +44,7 @@
 
 	"autoload": {
 		"psr-4": {
-			"IPub\\FiveHundredPixel\\": "src/"
+			"IPub\\FiveHundredPixel\\": "src/IPub/500px/"
 		}
 	},
 

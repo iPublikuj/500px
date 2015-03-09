@@ -46,9 +46,9 @@ class ExtensionTest extends Tester\TestCase
 	{
 		$dic = $this->createContainer();
 
-		Assert::true($dic->getService('twitter.client') instanceof IPub\FiveHundredPixel\Client);
-		Assert::true($dic->getService('twitter.config') instanceof IPub\FiveHundredPixel\Configuration);
-		Assert::true($dic->getService('twitter.session') instanceof IPub\FiveHundredPixel\SessionStorage);
+		Assert::true($dic->getService('500px.client') instanceof IPub\FiveHundredPixel\Client);
+		Assert::true($dic->getService('500px.config') instanceof IPub\FiveHundredPixel\Configuration);
+		Assert::true($dic->getService('500px.session') instanceof IPub\FiveHundredPixel\SessionStorage);
 	}
 }
 

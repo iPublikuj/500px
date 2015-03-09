@@ -89,7 +89,7 @@ class Profile extends Nette\Object
 						$this->details = $result->user;
 					}
 
-				} else if ($user = $this->fiveHundredPixel->getUser()) {
+				} else if ($this->fiveHundredPixel->getUser()) {
 					if (($result = $this->fiveHundredPixel->get('users')) && ($result instanceof Utils\ArrayHash)) {
 						$this->details = $result->user;
 					}

@@ -55,7 +55,7 @@ class ClientTest extends TestCase
 			'access_token_secret'   => 'ghijklmn',
 		]);
 
-		$this->httpClient->fakeResponse('{"id":38895958,"id_str":"38895958","screen_name":"john.doe","name":"John Doe"}', 200, ['Content-Type' => 'application/json; charset=utf-8']);
+		$this->httpClient->fakeResponse('{"user":{"id":38895958,"username":"john.doe","firstname":"John","lastname":"Doe"}}', 200, ['Content-Type' => 'application/json; charset=utf-8']);
 
 		Assert::same(38895958, $client->getUser());
 		Assert::count(1, $this->httpClient->requests);
@@ -71,8 +71,8 @@ class ClientTest extends TestCase
 	{
 		$client = $this->buildClient(array('oauth_verifier' => 'abcedf', 'oauth_token' => 'ghijklmn'));
 
-		$this->httpClient->fakeResponse('oauth_token=72157626318069415-087bfc7b5816092c&oauth_token_secret=a202d1f853ec69de&user_id=38895958&screen_name=john.doe', 200, ['Content-Type' => 'text/plain; charset=utf-8']);
-		$this->httpClient->fakeResponse('{"id":38895958,"id_str":"38895958","screen_name":"john.doe","name":"John Doe"}', 200, ['Content-Type' => 'application/json; charset=utf-8']);
+		$this->httpClient->fakeResponse('oauth_token=72157626318069415-087bfc7b5816092c&oauth_token_secret=a202d1f853ec69de', 200, ['Content-Type' => 'text/html; charset=utf-8']);
+		$this->httpClient->fakeResponse('{"user":{"id":38895958,"username":"john.doe","firstname":"John","lastname":"Doe"}}', 200, ['Content-Type' => 'application/json; charset=utf-8']);
 
 		Assert::same(38895958, $client->getUser());
 		Assert::count(2, $this->httpClient->requests);

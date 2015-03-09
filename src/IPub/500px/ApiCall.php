@@ -228,4 +228,49 @@ abstract class ApiCall extends Nette\Object
 
 		return Utils\ArrayHash::from($response->toArray());
 	}
+
+	/**
+	 * Upload photo to the 500px
+	 *
+	 * @param string $file
+	 * @param array $params
+	 *
+	 * @return Utils\ArrayHash
+	 *
+	 * @throws Exceptions\FileNotFoundException
+	 * @throws Exceptions\FileUploadFailedException
+	 * @throws OAuth\Exceptions\ApiException|static
+	 */
+	public function uploadPhoto($file, $params = NULL)
+	{
+		if (!file_exists($file)) {
+			throw new Exceptions\FileNotFoundException("File '$file' does not exists. Please provide valid path to file.");
+		}
+
+		$result = $this->post('photos', $params);
+
+		// Check if upload token was successfully created
+		if ($result instanceof Utils\ArrayHash && $result->offsetExists('upload_key') && $result->offsetExists('photo')) {
+			$photo = $result->photo;
+
+			$post = [
+				'consumer_key' => $this->consumer->key,
+				'access_key' => $this->getAccessToken()->getToken(),
+				'upload_key' => $result->upload_key,
+				'photo_id' => $photo->id,
+				'file' => new \CURLFile($file)
+			];
+
+			$response = $this->httpClient->makeRequest(
+				new Api\Request($this->consumer, $this->config->createUrl('upload', 'upload', []), Api\Request::POST, $post, [], $this->getAccessToken()),
+				'HMAC-SHA1'
+			);
+
+			if ($response->isOk() && $response->isJson() && $response->getHttpCode() == 200) {
+				return $photo;
+			}
+		}
+
+		throw new Exceptions\FileUploadFailedException("File '$file' could not be uploaded.'");
+	}
 }

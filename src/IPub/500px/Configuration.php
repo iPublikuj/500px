@@ -48,6 +48,7 @@ class Configuration extends Nette\Object
 	public $domains = [
 		'oauth' => 'https://api.500px.com/v1/oauth/',
 		'api' => 'https://api.500px.com/v1/',
+		'upload' => 'http://upload.500px.com/v1/',
 	];
 
 	/**

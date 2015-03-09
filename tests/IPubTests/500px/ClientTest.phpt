@@ -80,7 +80,7 @@ class ClientTest extends TestCase
 		$firstRequest = $this->httpClient->requests[0];
 
 		Assert::same('POST', $firstRequest->getMethod());
-		Assert::match('https://api.500px.com/v1//oauth/access_token', $firstRequest->getUrl()->getHostUrl() . $firstRequest->getUrl()->getPath());
+		Assert::match('https://api.500px.com/v1/oauth/access_token', $firstRequest->getUrl()->getHostUrl() . $firstRequest->getUrl()->getPath());
 		Assert::same(['Accept' => 'application/json'], $firstRequest->getHeaders());
 
 		$secondRequest = $this->httpClient->requests[1];

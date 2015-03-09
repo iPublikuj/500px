@@ -63,7 +63,7 @@ class ClientTest extends TestCase
 		$secondRequest = $this->httpClient->requests[0];
 
 		Assert::same('GET', $secondRequest->getMethod());
-		Assert::match('https://api.twitter.com/1.1/account/verify_credentials.json', $secondRequest->getUrl()->getHostUrl() . $secondRequest->getUrl()->getPath());
+		Assert::match('https://api.500px.com/v1/users', $secondRequest->getUrl()->getHostUrl() . $secondRequest->getUrl()->getPath());
 		Assert::same(['Accept' => 'application/json'], $secondRequest->getHeaders());
 	}
 
@@ -80,13 +80,13 @@ class ClientTest extends TestCase
 		$firstRequest = $this->httpClient->requests[0];
 
 		Assert::same('POST', $firstRequest->getMethod());
-		Assert::match('https://api.twitter.com/oauth/access_token', $firstRequest->getUrl()->getHostUrl() . $firstRequest->getUrl()->getPath());
+		Assert::match('https://api.500px.com/v1//oauth/access_token', $firstRequest->getUrl()->getHostUrl() . $firstRequest->getUrl()->getPath());
 		Assert::same(['Accept' => 'application/json'], $firstRequest->getHeaders());
 
 		$secondRequest = $this->httpClient->requests[1];
 
 		Assert::same('GET', $secondRequest->getMethod());
-		Assert::match('https://api.twitter.com/1.1/account/verify_credentials.json', $secondRequest->getUrl()->getHostUrl() . $secondRequest->getUrl()->getPath());
+		Assert::match('https://api.500px.com/v1/users', $secondRequest->getUrl()->getHostUrl() . $secondRequest->getUrl()->getPath());
 		Assert::same(['Accept' => 'application/json'], $secondRequest->getHeaders());
 	}
 }

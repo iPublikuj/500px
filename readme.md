@@ -9,20 +9,10 @@
 
 ## Installation
 
-The best way to install ipub/500px is using  [Composer](http://getcomposer.org/):
-
-```json
-{
-	"require": {
-		"ipub/500px": "~1.0.0"
-	}
-}
-```
-
-or
+The best way to install ipub/500px is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require ipub/500px:~1.0.0
+$ composer require ipub/500px
 ```
 
 After that you have to register extension in config.neon.

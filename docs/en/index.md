@@ -4,20 +4,10 @@ This extension adds support for OAuth connection to 500px, so you can seamlessly
 
 ## Installation
 
-The best way to install ipub/500px is using  [Composer](http://getcomposer.org/):
-
-```json
-{
-	"require": {
-		"ipub/500px": "dev-master"
-	}
-}
-```
-
-or
+The best way to install ipub/500px is using [Composer](http://getcomposer.org/):
 
 ```sh
-$ composer require ipub/500px:@dev
+$ composer require ipub/500px
 ```
 
 After that you have to register extension in config.neon.
@@ -84,7 +74,7 @@ class LoginPresenter extends BasePresenter
 		$dialog->onResponse[] = function (LoginDialog $dialog) {
 			$fiveHundredPixel = $dialog->getClient();
 
-			if ( !$fiveHundredPixel->getUser()) {
+			if (!$fiveHundredPixel->getUser()) {
 				$this->flashMessage("Sorry bro, twitter authentication failed.");
 				return;
 			}
